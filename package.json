@@ -1,0 +1,13 @@
+{
+  "name": "minted",
+  "version": "1.0.0",
+  "description": "One working day at the coin press. Thirty bells — strike a coin or buy the machine. Only the vault at close counts.",
+  "private": true,
+  "scripts": {
+    "start": "serve -l 8000 .",
+    "test": "node test/engine.test.js && node test/solver.test.js && node test/generator.test.js"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

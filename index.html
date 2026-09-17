@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minted — the daily coin press</title>
+<meta name="description" content="One working day at the coin press. Thirty bells — at each one, strike a coin by hand or buy a machine from the day's catalogue. Only the vault at close counts. The same mint for everyone, fresh every midnight.">
+<link rel="canonical" href="https://jonezzyboy.github.io/minted/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪙</text></svg>">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2790049582805492"
+     crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>try { var t = localStorage.getItem('minted-theme-v1'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+</head>
+<body>
+
+<header class="masthead">
+  <h1 class="wordmark">Minted<span class="stop">.</span></h1>
+  <p class="meta"><span id="issue">No. —</span> · <span id="date"></span></p>
+  <p class="archive-note" id="archiveNote" hidden>
+    A past day at the press, replayed for practice — streaks, stats and commendations unaffected.
+    <a href=".">Back to today's</a>
+  </p>
+  <p class="tagline">One working day at the coin press. Thirty bells — at each one,
+    strike a coin by hand or buy a machine from the day's catalogue. Only the
+    vault at close counts.</p>
+  <details class="rules">
+    <summary>How to play</summary>
+    <div class="rules-body">
+      <ol class="rules-steps">
+        <li>The mint's day runs to thirty bells. At each bell you do one
+          thing: strike a coin by hand, or buy one machine from the day's
+          catalogue of six.</li>
+        <li>Machines pay out at every bell — a machine bought this bell
+          starts on the next. What you buy, and when, is everything: a press
+          bought early earns all day; bought late, it never pays for
+          itself.</li>
+        <li>Only the vault at close counts. Spent coins are gone — every
+          purchase is a bet that the day is long enough to win the money
+          back.</li>
+        <li>You get three shifts at the press; your best counts, measured
+          against the day's one best plan. Everyone works the same
+          catalogue.</li>
+      </ol>
+    </div>
+  </details>
+</header>
+
+<main>
+  <section class="board" id="board">
+    <div class="vaultline">
+      <p class="vault-block"><b class="vault" id="vault">0</b>
+        <span class="vault-label">in the vault</span>
+        <span class="close-note" id="closeNote" hidden></span></p>
+      <p class="run-marks" id="shiftMarks" aria-label="Shifts worked"></p>
+    </div>
+
+    <div class="meters">
+      <span class="meter">a strike mints <b id="handVal">5</b></span>
+      <span class="meter">the machines make <b id="rateVal">0</b> a bell</span>
+      <span class="meter">bell <b id="bellNow">1</b> of <b id="bellTotal">30</b></span>
+    </div>
+
+    <div class="bells" id="bellRow" aria-hidden="true"></div>
+
+    <div class="floor">
+      <div class="press">
+        <div class="floats" id="floats" aria-hidden="true"></div>
+        <button type="button" class="strike" id="strike" aria-label="Strike a coin">
+          <span class="strike-face">🪙</span>
+          <span class="strike-word">Strike</span>
+        </button>
+      </div>
+
+      <div class="stockroom">
+        <div class="stock-head" aria-hidden="true">
+          <span class="stock-title">The day's catalogue</span>
+          <span class="stock-note">one purchase costs one bell</span>
+        </div>
+        <div class="catalogue" id="catalogue" aria-label="The day's catalogue"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ledger" id="ledger" hidden aria-live="polite"></section>
+
+  <div class="after-shift" id="afterShift" hidden>
+    <button type="button" class="primary" id="again">Back to the floor</button>
+    <button type="button" class="ghost" id="done">Call it a day</button>
+  </div>
+
+  <section class="results" id="results" hidden>
+    <p class="rosette" id="rosette" aria-hidden="true"></p>
+    <h2 class="rating-name" id="ratingName"></h2>
+    <p class="final-line">Your best shift <b id="finalScore">—</b> · the day's best plan <b id="finalOptimal">—</b></p>
+    <p class="rating-pct" id="ratingPct"></p>
+    <p class="best-plan" id="bestPlan"></p>
+    <p class="new-badges" id="newBadges" hidden></p>
+
+    <div class="result-actions">
+      <button type="button" class="primary" id="share">Share result</button>
+    </div>
+
+    <dl class="stats" id="dayStats">
+      <div><dt>Minted</dt><dd id="statPlayed">0</dd></div>
+      <div><dt>Streak</dt><dd id="statStreak">0</dd></div>
+      <div><dt>Perfect days</dt><dd id="statPerfects">0</dd></div>
+      <div><dt>Average</dt><dd id="statAvg">—</dd></div>
+    </dl>
+
+    <p class="clock-line">A fresh press at midnight — <b id="clock">—</b></p>
+  </section>
+
+  <section class="badges">
+    <details>
+      <summary>Commendations <span class="badge-count" id="badgeCount"></span></summary>
+      <ul id="badgeList"></ul>
+    </details>
+  </section>
+</main>
+
+<footer class="foot">
+  <a href="https://jonezzyboy.github.io/">jonezzyboy*</a>
+  <div class="vault-picker">
+    <button type="button" id="theme" class="theme-toggle" aria-haspopup="listbox" aria-expanded="false"></button>
+    <div id="themeMenu" class="theme-menu" role="listbox" aria-label="Vault" hidden></div>
+  </div>
+  <span>same mint for everyone, everywhere</span>
+</footer>
+
+<p class="also">Also in the till: <a href="https://jonezzyboy.github.io/reckon/" data-daily="reckon">Reckon</a> — the daily numbers ledger
+  · <a href="https://jonezzyboy.github.io/dealt/" data-daily="dealt">Dealt</a> — the daily poker read
+  · <a href="https://jonezzyboy.github.io/herded/" data-daily="herded">Herded</a> — the daily animal line-up</p>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script src="game.js"></script>
+</body>
+</html>
