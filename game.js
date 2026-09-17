@@ -790,11 +790,11 @@ if (typeof document !== 'undefined') (function () {
   /* ---------- the vault you work in ---------- */
 
   const THEMES = [
-    { id: '', name: 'Counting house', floor: '#1b2a20', card: '#f6f0dc' },
-    { id: 'bullion', name: 'Bullion room', floor: '#e8dbb4', card: '#fcf8ea' },
-    { id: 'copperworks', name: 'Copperworks', floor: '#2c1b12', card: '#f5e9dc' },
-    { id: 'ledger', name: 'The ledger', floor: '#e5e0d1', card: '#fbf9f1' },
-    { id: 'nightvault', name: 'Night vault', floor: '#0d0f12', card: '#1c2026' },
+    { id: '', name: 'Counting house', floor: '#1b2a20', card: '#f6f0dc', coin: '#d9a63d' },
+    { id: 'bullion', name: 'Bullion room', floor: '#e8dbb4', card: '#fcf8ea', coin: '#ab7d10' },
+    { id: 'copperworks', name: 'Copperworks', floor: '#2c1b12', card: '#f5e9dc', coin: '#d07a3d' },
+    { id: 'ledger', name: 'The ledger', floor: '#e5e0d1', card: '#fbf9f1', coin: '#9c7514' },
+    { id: 'nightvault', name: 'Night vault', floor: '#0d0f12', card: '#1c2026', coin: '#dcaa4c' },
   ];
 
   let themeId = localStorage.getItem(THEME_KEY) || '';
@@ -803,14 +803,17 @@ if (typeof document !== 'undefined') (function () {
   const themeBtn = $('#theme');
   const themeMenu = $('#themeMenu');
 
+  // Each swatch is a coin on that vault's floor: floor square, coin in the
+  // theme's brass, rim in its card stock.
   function themeChip(t) {
     const chip = document.createElement('span');
     chip.className = 'chip';
     chip.style.background = t.floor;
-    const leaf = document.createElement('span');
-    leaf.className = 'chip-leaf';
-    leaf.style.background = t.card;
-    chip.appendChild(leaf);
+    const coin = document.createElement('span');
+    coin.className = 'chip-coin';
+    coin.style.background = t.coin;
+    coin.style.boxShadow = `inset 0 0 0 1.5px ${t.card}`;
+    chip.appendChild(coin);
     return chip;
   }
 
@@ -838,8 +841,15 @@ if (typeof document !== 'undefined') (function () {
       b.setAttribute('aria-selected', String(t.id === themeId));
       if (t.id === themeId) b.classList.add('selected');
       const name = document.createElement('span');
+      name.className = 'theme-name';
       name.textContent = t.name;
       b.append(themeChip(t), name);
+      if (t.id === themeId) {
+        const tick = document.createElement('span');
+        tick.className = 'tick';
+        tick.textContent = '✓';
+        b.appendChild(tick);
+      }
       b.addEventListener('click', () => {
         themeId = t.id;
         localStorage.setItem(THEME_KEY, themeId);
