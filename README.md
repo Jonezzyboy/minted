@@ -24,8 +24,11 @@ single best plan. Everyone, everywhere, works the same catalogue.
   server, no data files. Everyone sees the same six machines at the same
   prices.
 - The day flips at **local midnight**.
-- `?day=N` (0-based) or `?no=N` (1-based) replays a past day for practice —
-  streaks, stats and commendations unaffected.
+- **Past days** (below the floor) lists every day before today, with the
+  vault it banked and how close to the best plan it came. Each entry links to
+  that day's press (also `?day=N` 0-based, `?no=N` 1-based) — practice only,
+  with stats, streaks and commendations unaffected, though a better shift
+  replaces what the day banked and is marked *late*.
 
 ## The best plan
 

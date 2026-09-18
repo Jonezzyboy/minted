@@ -338,6 +338,7 @@ if (typeof document !== 'undefined') (function () {
   const DAY_KEY = 'minted-day-v1';
   const STATS_KEY = 'minted-stats-v1';
   const BADGES_KEY = 'minted-badges-v1';
+  const HISTORY_KEY = 'minted-history-v1';
   const BOUGHT_KEY = 'minted-catalogue-v1';
   const THEME_KEY = 'minted-theme-v1';
 
@@ -400,6 +401,58 @@ if (typeof document !== 'undefined') (function () {
     stats.lastDay = day;
     localStorage.setItem(STATS_KEY, JSON.stringify(stats));
     return stats;
+  }
+
+  /* ---------- past days ---------- */
+
+  function loadHistory() {
+    const h = load(HISTORY_KEY);
+    return Array.isArray(h) ? h : [];
+  }
+
+  // finish() runs again on every reload of a finished day, so this upserts.
+  function recordHistory(score, pct) {
+    const history = loadHistory();
+    const existing = history.find((h) => h.day === day);
+    if (existing && score <= existing.score) return;
+    if (existing) Object.assign(existing, { score, pct, late: archive });
+    else history.push({ day, score, pct, late: archive });
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  }
+
+  function dateForDay(d) {
+    return new Date(EPOCH.y, EPOCH.m, EPOCH.d + d).toLocaleDateString(undefined, {
+      day: 'numeric', month: 'short', year: 'numeric',
+    });
+  }
+
+  function renderHistory() {
+    $('#history').hidden = today === 0;
+    if (today === 0) return;
+    const byDay = new Map(loadHistory().map((h) => [h.day, h]));
+    const ol = $('#historyLines');
+    ol.innerHTML = '';
+    for (let d = today - 1; d >= 0; d--) {
+      const h = byDay.get(d);
+      const li = document.createElement('li');
+      li.className = [h ? (h.pct >= 100 ? 'perfect' : '') : 'blank',
+        archive && d === day ? 'current' : ''].filter(Boolean).join(' ');
+      const a = document.createElement('a');
+      a.href = `?no=${d + 1}`;
+      a.textContent = `No. ${d + 1} · ${dateForDay(d)}`;
+      const label = document.createElement('span');
+      label.className = 'past-label';
+      label.appendChild(a);
+      const leader = document.createElement('span');
+      leader.className = 'leader';
+      const amt = document.createElement('span');
+      amt.className = 'amt';
+      amt.textContent = h
+        ? `${fmt(h.score)} · ${h.pct}%${h.late ? ' late' : ''}`
+        : 'not worked';
+      li.append(label, leader, amt);
+      ol.appendChild(li);
+    }
   }
 
   /* ---------- the daily shelf ----------
@@ -711,6 +764,7 @@ if (typeof document !== 'undefined') (function () {
     const best = bestShift();
     const rating = rate(best, optimal);
     const stats = recordFinish(rating.pct);
+    recordHistory(best, rating.pct);
 
     $('#finalScore').textContent = fmt(best);
     $('#finalOptimal').textContent = fmt(optimal);
@@ -736,6 +790,7 @@ if (typeof document !== 'undefined') (function () {
       ? `New commendation${fresh.length === 1 ? '' : 's'}: ${fresh.map((b) => b.name).join(' · ')}`
       : '';
     renderBadges();
+    renderHistory();
 
     resultsEl.hidden = false;
     resultsEl.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
@@ -903,6 +958,7 @@ if (typeof document !== 'undefined') (function () {
   });
   $('#archiveNote').hidden = !archive;
   renderBadges();
+  renderHistory();
   renderShelfTicks();
 
   function tickClock() {
