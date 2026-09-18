@@ -6,18 +6,17 @@ One working day at the coin press. Part of [The Daily Shelf](https://jonezzyboy.
 
 ## The game
 
-The mint's day runs to thirty bells. At each bell you do one thing:
+The day runs to thirty bells. At each one you do a single thing:
 
 - **Strike** a coin by hand — it goes straight into the vault.
 - **Buy** one machine from the day's catalogue of six.
 
-Machines pay out at every bell (a machine bought this bell starts on the
-next), so what you buy — and when — is everything. Only the vault at close
-counts: spent coins are gone, and every purchase is a bet that the day is
-long enough to win the money back.
+A machine pays out at every bell from the next one on. Bought early it earns
+all day; bought late it never wins its price back. Spent coins are gone, and
+only what is in the vault at the last bell counts.
 
-You get three shifts at the press; your best counts, measured against the
-day's one best plan. Everyone, everywhere, works the same catalogue.
+Three shifts a day, and your best one counts — measured against the day's
+single best plan. Everyone, everywhere, works the same catalogue.
 
 ## The daily
 
